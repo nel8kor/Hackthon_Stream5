@@ -1,0 +1,1 @@
+alias python='winpty "C:\Program Files\Python313\python.exe"'
