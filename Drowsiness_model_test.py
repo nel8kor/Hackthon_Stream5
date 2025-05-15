@@ -21,4 +21,4 @@ print(f"Validation Accuracy: {accuracy*100:.2f}%")
 print('\n*********************\n')
 
 print(confusion_matrix(y_true, y_pred_classes))
-print(classification_report(y_true, y_pred_classes, target_names=["awake","drowsy"]))
+print(classification_report(y_true, y_pred_classes, labels=[0, 1], target_names=["awake","drowsy"]))

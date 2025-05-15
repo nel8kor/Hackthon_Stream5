@@ -25,10 +25,10 @@ def extract_frames_from_video(video_path, label, size=(240, 320)):
     return np.array(frames), np.array(labels)
  
 # Dataset loading with progress
-X_Val, y_Val = [], []
+X, y = [], []
  
-for folder in tqdm(os.listdir("train"), desc="Folders"):
-    folder_path = os.path.join("train", folder)
+for folder in tqdm(os.listdir("dataset/train"), desc="Folders"):
+    folder_path = os.path.join("dataset/train", folder)
     if not os.path.isdir(folder_path):
         continue
     label = label_map.get(folder)
@@ -41,14 +41,16 @@ for folder in tqdm(os.listdir("train"), desc="Folders"):
             continue
         video_path = os.path.join(folder_path, file)
         frames, labels = extract_frames_from_video(video_path, label)
-        X_Val.extend(frames)
-        y_Val.extend(labels)
+        X.extend(frames)
+        y.extend(labels)
  
 # Convert to numpy arrays
-X_Val = np.array(X_Val)
-y_Val = to_categorical(np.array(y_Val), num_classes=2)
+X = np.array(X)
+y = to_categorical(np.array(y).astype('float16'), num_classes=2)
  
 # Save dataset for reuse
-np.save('X_Val.npy', X_Val)
-np.save('y_Val.npy', y_Val)
-print(f"Saved X shape: {X_Val.shape}, y shape: {y_Val.shape}")
+print("...........saving in progress..........")
+np.save('X.npy', X)
+np.save('y.npy', y)
+print(".............saved..............")
+print(f"Saved X shape: {X.shape}, y shape: {y.shape}")

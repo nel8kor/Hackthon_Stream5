@@ -5,12 +5,10 @@ from tensorflow.keras.preprocessing.image import img_to_array # type: ignore
 
 model = load_model('model.h5')
 cap = cv2.VideoCapture(0)
-cap.set(3, 320)
-cap.set(4, 240)
 
 #sequence = []
 frame_size = (64, 64)  # Must match model input
-THRESHOLD = 15  # Frames
+THRESHOLD = 30  # Frames
 
 counter = 0
 
@@ -34,18 +32,14 @@ while True:
 
     if label == 1:  # 1 = drowsy
         counter += 1
-        status = "DROWSY!"
     else:
         counter = 0
-        status = "Awake"
         
-    #labels = ['awake', 'drowsy']
+    labels = ['awake', 'drowsy']
 
     if counter > THRESHOLD:
-        # cv2.putText(frame, labels[label], (30, 70), 
-        #             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
-        cv2.putText(frame, f"Status: {status}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7,
-                    (0, 0, 255) if "DROWSY" in status else (0, 255, 0), 2)
+        cv2.putText(frame, labels[label], (30, 70), 
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
 
     cv2.imshow("Drowsiness Detection", frame)
     if cv2.waitKey(1) & 0xFF == 27:
