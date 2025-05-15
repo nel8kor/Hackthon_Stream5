@@ -1,3 +1,5 @@
+#!/usr/bin/env py
+# -*- coding: utf-8 -*-
 import os
 import cv2 # type: ignore
 import numpy as np # type: ignore

@@ -1,3 +1,6 @@
+#!/usr/bin/env py
+# -*- coding: utf-8 -*-
+# Drowsiness detection with head pose estimation using OpenCV and MediaPipe
 import cv2 # type: ignore
 import mediapipe as mp # type: ignore
 import numpy as np # type: ignore

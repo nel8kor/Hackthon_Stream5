@@ -1,3 +1,6 @@
+#!/usr/bin/env py
+# -*- coding: utf-8 -*-
+# To view the frames and labels of the dataset
 import numpy as np # type: ignore
 import matplotlib.pyplot as plt # type: ignore
 

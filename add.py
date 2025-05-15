@@ -1,3 +1,6 @@
+#!/usr/bin/env py
+# -*- coding: utf-8 -*-
+# This script is a simple addition program with a user interface and a test function.
 # get a function which add two numbers
 def add(a, b):
     return a + b

@@ -1,3 +1,5 @@
+#!/usr/bin/env py
+# -*- coding: utf-8 -*-
 from tensorflow.keras.models import Sequential # type: ignore
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout # type: ignore
 from tensorflow.keras.layers import GlobalAveragePooling2D # type: ignore

@@ -1,3 +1,5 @@
+#!/usr/bin/env py
+
 from sklearn.metrics import classification_report, confusion_matrix # type: ignore
 import numpy as np
 from tensorflow.keras.models import load_model # type: ignore
@@ -16,7 +18,7 @@ y_true = np.argmax(y_val, axis=1)
 loss, accuracy = model.evaluate(X_val, y_val)
 print(f"Validation Accuracy: {accuracy*100:.2f}%")
 
-print('\n*********************')
+print('\n*********************\n')
 
 print(confusion_matrix(y_true, y_pred_classes))
 print(classification_report(y_true, y_pred_classes, target_names=["awake","drowsy"]))
