@@ -47,7 +47,7 @@ def eye_aspect_ratio(eye_pts):
     return (A + B) / (2.0 * C)
  
 # Start video
-video_path = 'dataset\driver_looking_at_phone\3820195_dms_drowsy_1.mp4'  # Change to your actual file path
+#video_path = 'dataset\drowsy\3846934_dms_drowsy_1.mp4'  # Change to your actual file path
 cap = cv2.VideoCapture(0)
 cap.set(3, 320)
 cap.set(4, 240)
