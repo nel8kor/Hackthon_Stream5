@@ -28,7 +28,7 @@ model = Sequential([
 ])
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-history=model.fit(X.astype(np.float16), y, epochs=50, batch_size=32, validation_split=0.1)
+history=model.fit(X, y, epochs=50, batch_size=32, validation_split=0.1)
 model.save('model.h5')
 
 #Training data plot
