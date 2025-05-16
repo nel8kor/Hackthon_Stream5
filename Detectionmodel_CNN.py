@@ -15,7 +15,7 @@ cap = cv2.VideoCapture(0)
 cap.set(3, 320)
 cap.set(4, 240)
 
-frame_size = (240, 320)
+frame_size = (64, 64)
 THRESHOLD = 15
 counter = 0
 saved_frame_count = 0
@@ -31,7 +31,7 @@ while True:
         print(f"Resize failed: {e}")
         continue
 
-    #face = face / 255.0
+    face = face / 255.0
     face = img_to_array(face)
     face = np.expand_dims(face, axis=0)
 
