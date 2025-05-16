@@ -8,7 +8,7 @@ cap = cv2.VideoCapture(0)
 
 #sequence = []
 frame_size = (64, 64)  # Must match model input
-THRESHOLD = 30  # Frames
+THRESHOLD = 10  # Frames
 
 counter = 0
 
