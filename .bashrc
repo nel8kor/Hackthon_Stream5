@@ -1,1 +1,1 @@
-alias python='winpty "C:\Program Files\Python312\python.exe"'
+alias python='winpty "C:\Program Files\Python310\python.exe"'
