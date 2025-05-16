@@ -16,7 +16,7 @@ cap.set(3, 320)
 cap.set(4, 240)
 
 frame_size = (64, 64)
-THRESHOLD = 15
+THRESHOLD = 30
 counter = 0
 saved_frame_count = 0
 
