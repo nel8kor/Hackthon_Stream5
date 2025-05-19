@@ -15,7 +15,7 @@ cap = cv2.VideoCapture(0)
 cap.set(3, 320)
 cap.set(4, 240)
 
-frame_size = (64, 64)
+frame_size = (240, 320)
 THRESHOLD = 30
 counter = 0
 saved_frame_count = 0

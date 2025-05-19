@@ -25,10 +25,10 @@ print(f"Validation Accuracy: {accuracy*100:.2f}%")
 print('\n*********************\n')
 
 print(confusion_matrix(y_true, y_pred_classes))
-print(classification_report(y_true, y_pred_classes, labels=[0, 1], target_names=["awake","drowsy"]))
+print(classification_report(y_true, y_pred_classes, labels=[0, 1, 2], target_names=["awake","distracted","drowsy"]))
 
 cm = confusion_matrix(y_true, y_pred_classes)
-sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['awake','drowsy'], yticklabels=['awake','drowsy'])
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=['awake','distracted','drowsy'], yticklabels=['awake','distracted','drowsy'])
 plt.xlabel('Predicted')
 plt.ylabel('True')
 plt.title('Confusion Matrix')

@@ -17,8 +17,9 @@ frame_count = X.shape[0]
 
 print(f"Total frames: {frame_count}")
 
+sample_range = (2407, 2507)
 
-for i in range(3140, 3200):  # First 30 frames
+for i in range(sample_range[0], sample_range[1]):  # First 30 frames
 	plt.imshow(X[i])
 	plt.title(f"Label: {np.argmax(y[i])}")
 	plt.axis('off')
