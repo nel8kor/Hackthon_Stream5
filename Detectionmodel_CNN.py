@@ -1,68 +1,83 @@
 import cv2
 import numpy as np
 from tensorflow.keras.models import load_model # type: ignore
-from tensorflow.keras.preprocessing.image import img_to_array # type: ignore
+from collections import deque
 import os
+from datetime import datetime
 
-# Load model
+# Load the trained model
 model = load_model('model.h5')
 
-# Create output directory if not exists
-os.makedirs("classified_frames", exist_ok=True)
+# Create output folder for saved frames
+output_dir = "classified_frames"
+os.makedirs(output_dir, exist_ok=True)
+save_dir = "saved_drowsy_npy"
+os.makedirs(save_dir, exist_ok=True)
 
-# Initialize video capture
+# Initialize webcam
 cap = cv2.VideoCapture(0)
-cap.set(3, 320)
-cap.set(4, 240)
 
-frame_size = (240, 320)
-THRESHOLD = 30
-counter = 0
-saved_frame_count = 0
+# Sequence buffer
+sequence_length = 10
+frame_buffer = deque(maxlen=sequence_length)
+
+X, y = [], []
+
+print("⏳ Starting real-time detection. Press 'q' to quit.")
 
 while True:
     ret, frame = cap.read()
     if not ret:
         break
 
-    try:
-        face = cv2.resize(frame, frame_size)
-    except Exception as e:
-        print(f"Resize failed: {e}")
-        continue
+    # Resize to model input
+    resized_frame = cv2.resize(frame, (120, 160))
+    rgb_frame = cv2.cvtColor(resized_frame, cv2.COLOR_BGR2RGB)
 
-    face = face / 255.0
-    face = img_to_array(face)
-    face = np.expand_dims(face, axis=0)
+    # Normalize if needed (adjust if your training used different normalization)
+    normalized_frame = rgb_frame.astype(np.float32) / 255.0
 
-    pred = model.predict(face)[0]
-    label = np.argmax(pred)
+    # Add frame to buffer
+    frame_buffer.append(normalized_frame)
+    
+    # If we have enough frames for a sequence
+    if len(frame_buffer) == sequence_length:
+        input_sequence = np.array(frame_buffer).reshape(1, sequence_length, 120, 160, 3)
+        prediction = model.predict(input_sequence, verbose=0)
+        pred_class = np.argmax(prediction)
 
-    if label == 1:
-        counter += 1
-        status = "DROWSY"
-    else:
-        counter = 0
-        status = "AWAKE"
+        # Draw prediction on live frame
+        label = "Drowsy" if pred_class == 1 else "Distracted"
+        color = (0, 0, 255) if pred_class == 1 else (0, 255, 255)
+        cv2.putText(frame, f"Detected: {label}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, color, 2)
 
-    # Save frame if label is predicted as drowsy or every N frames
-    if status == "DROWSY" or saved_frame_count % 30 == 0:
-        filename = f"classified_frames/frame_{saved_frame_count}_{status}.jpg"
-        annotated_frame = frame.copy()
-        cv2.putText(annotated_frame, f"Status: {status}", (10, 60),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.7,
-                    (0, 0, 255) if status == "DROWSY" else (0, 255, 0), 2)
-        cv2.imwrite(filename, annotated_frame)
-        saved_frame_count += 1
+        # Save all frames if drowsy
+        if pred_class == 1:
+            timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+            for i, f in enumerate(frame_buffer):
+                save_path = os.path.join(output_dir, f"drowsy_{timestamp}_{i}.jpg")
+                bgr_frame = cv2.cvtColor((f * 255).astype(np.uint8), cv2.COLOR_RGB2BGR)
+                cv2.imwrite(save_path, bgr_frame)
+            # Convert list of frames to numpy array
+            drowsy_sequence = np.array(frame_buffer)  # shape: (10, height, width, 3)
+            labels=np.array(pred_class)
+            X.append(drowsy_sequence)
+            y.append(labels) 
+            #np.save(save_path, data)
+            print(f"🟥 Drowsy state detected — saved 10 frames at {timestamp}")
+            # print(f"🟥 Drowsy state detected — saved sequence and label to {save_path}")
 
-    cv2.putText(frame, f"Status: {status}", (10, 60),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.7,
-                (0, 0, 255) if status == "DROWSY" else (0, 255, 0), 2)
+    # Show the live feed
+    cv2.imshow("Real-Time Drowsiness Detection", frame)
 
-    cv2.imshow("Drowsiness Detection", frame)
-
-    if cv2.waitKey(1) & 0xFF == 27:  # ESC to exit
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+X_val = np.array(X)
+y_val = np.array(y)
+np.save(os.path.join(save_dir, "X_val.npy"), X_val)
+np.save(os.path.join(save_dir, "y_val.npy"), y_val)
+print(f"🟩 Saved {len(X_val)} frames and labels to {save_dir}")
 
+# Cleanup
 cap.release()
 cv2.destroyAllWindows()

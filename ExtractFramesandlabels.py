@@ -112,7 +112,7 @@ def extract_frames(video_path):
     cap.release()
     return np.array(frames), np.array(labels), FPS
 
-def process_dataset(dataset_dir="dataset/train"):
+def process_dataset(dataset_dir="dataset/val"):
     X, y, stats = [], [], []
 
     for folder in tqdm(os.listdir(dataset_dir), desc="Processing Folders"):
@@ -160,7 +160,6 @@ print(f"distracted samples: {(y == 1).sum()}")
 print(f"drowsy samples: {(y == 2).sum()}")
 
 # Save the filtered arrays
-np.save("X.npy", X)
-np.save("y.npy", y)
-print(f"y_filtered: {y.shape}")
+np.save("X_val.npy", X)
+np.save("y_val.npy", y)
 print("Saved filtered data as X.npy and y.npy")
