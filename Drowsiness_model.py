@@ -1,45 +1,79 @@
 #!/usr/bin/env py
 # -*- coding: utf-8 -*-
+import numpy as np
+from keras.utils import to_categorical # type: ignore
 from tensorflow.keras.models import Sequential # type: ignore
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, BatchNormalization, Input # type: ignore
-from tensorflow.keras.layers import GlobalAveragePooling2D # type: ignore
-import numpy as np # type: ignore
-import matplotlib.pyplot as plt # type: ignore
-from sklearn.utils import shuffle
-from tensorflow.keras.callbacks import EarlyStopping # type: ignore
+from tensorflow.keras.layers import Conv3D, MaxPooling3D, Flatten, Dense, Dropout, BatchNormalization # type: ignore
+from tensorflow.keras.optimizers import Adam # type: ignore
+import matplotlib.pyplot as plt
 
-# Load the file
-X = np.load('X.npy')
-y = np.load('y.npy')
+def build_3d_cnn(input_shape=(10, 240, 320, 3), num_classes=2):
+    model = Sequential()
 
-#X, y = shuffle(X, y, random_state=42)
+    # Block 1
+    model.add(Conv3D(32, kernel_size=(3, 3, 3), activation='relu', padding='same', input_shape=input_shape))
+    model.add(MaxPooling3D(pool_size=(1, 2, 2)))
+    model.add(BatchNormalization())
+
+    # Block 2
+    model.add(Conv3D(64, kernel_size=(3, 3, 3), activation='relu', padding='same'))
+    model.add(MaxPooling3D(pool_size=(1, 2, 2)))
+    model.add(BatchNormalization())
+
+    # Block 3
+    model.add(Conv3D(128, kernel_size=(3, 3, 3), activation='relu', padding='same'))
+    model.add(MaxPooling3D(pool_size=(2, 2, 2)))  # reduce temporal dimension
+    model.add(BatchNormalization())
+
+    # Classification Head
+    model.add(Flatten())
+    model.add(Dense(256, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(num_classes, activation='softmax'))
+
+    # Compile
+    model.compile(loss='categorical_crossentropy', optimizer=Adam(learning_rate=1e-4), metrics=['accuracy'])
+
+    return model
 
 
-print("X shape:", X.shape)
-print("y shape:", y.shape)
-print("X dtype:", X.dtype)
-print("y dtype:", y.dtype)
+# Load data
+X = np.load("X.npy")  # shape: (num_samples, height, width, channels)
+y = np.load("y.npy")  # shape: (num_samples,), values: 0, 1, 2
 
-#Training the model
-model = Sequential([
-    Input(shape=(240, 320, 3)),
-    Conv2D(32, (3, 3), activation='relu'),
-    BatchNormalization(),
-    MaxPooling2D(),
-    Conv2D(64, (3, 3), activation='relu'),
-    BatchNormalization(),
-    MaxPooling2D(),
-    Conv2D(128, (3, 3), activation='relu'),
-    MaxPooling2D(),
-    BatchNormalization(),
-    GlobalAveragePooling2D(),  # replaces Flatten safely
-    Dense(128, activation='relu'),
-    Dropout(0.5),
-    Dense(3, activation='softmax')
-])
+# Filter for distracted (1) and drowsy (2)
+mask = (y == 1) | (y == 2)
+X_filtered = X[mask]
+y_filtered = y[mask]
 
-model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-history = model.fit(X, y, epochs=30, batch_size=32, validation_split=0.2)
+# Relabel to 0 and 1: 0 = distracted, 1 = drowsy
+y_binary = np.where(y_filtered == 1, 0, 1)
+
+# One-hot encode: 0 → [1,0] (distracted), 1 → [0,1] (drowsy)
+y_onehot = to_categorical(y_binary, num_classes=2)
+
+print(f"X shape: {X_filtered.shape}, y shape: {y_onehot.shape}")
+
+# Create sequences of 10 frames
+sequence_length = 10
+num_samples = len(X_filtered) - sequence_length + 1
+
+X_seq = np.array([X_filtered[i:i+sequence_length] for i in range(num_samples)])
+y_seq_indices = np.array([y_binary[i+sequence_length//2] for i in range(num_samples)])
+y_seq_onehot = to_categorical(y_seq_indices, num_classes=2)
+
+
+print(f"X_seq shape: {X_seq.shape}, y_seq shape: {y_seq_onehot.shape}")
+
+model = build_3d_cnn(input_shape=(10, 120, 160, 3), num_classes=2)
+
+history = model.fit(
+    X_seq, y_seq_onehot,
+    validation_split=0.2,
+    epochs=10,
+    batch_size=2,
+    shuffle=True
+)
 
 model.save('model.h5')
 
