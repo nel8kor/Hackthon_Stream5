@@ -9,8 +9,6 @@ from keras.utils import to_categorical # type: ignore
 X = np.load('saved_drowsy_npy\X_seq.npy')
 y = np.load('saved_drowsy_npy\y_seq.npy')
 
-#y = to_categorical(y, num_classes=2)
-
 print("X shape:", X.shape)
 print("y shape:", y.shape)
 print("X dtype:", X.dtype)
@@ -31,7 +29,7 @@ sample_range = (0, 1)  # reduced range for quick testing
 
 for i in range(sample_range[0], sample_range[1]):
     for t in range(10):  # show all 10 frames in the sequence
-        plt.imshow(X[i][t].astype(np.uint8))  # ensure data is displayable
+        plt.imshow(X[i][t])  # ensure data is displayable
         plt.title(f"Sequence {i}, Frame {t}, Label: {y[i]}")
         plt.axis('off')
         plt.show()
