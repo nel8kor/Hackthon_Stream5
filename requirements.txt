@@ -1,0 +1,6 @@
+# Requirements for training the CNN model for drowsiness detection
+- Python version: 3.9.10
+- Developed using VSCode(latest version)
+- TensorFlow version: 2.11.0
+- Keras version: 2.11.0
+- Better to use GPU for training the model for faster performance

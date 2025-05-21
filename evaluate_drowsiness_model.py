@@ -32,8 +32,13 @@ else:
 # Confirm shape
 print(f"y_seq_classes shape: {y_seq_classes.shape}, y_pred_classes shape: {y_pred_classes.shape}")
 
+
 # Classification report
 print(classification_report(y_seq_classes, y_pred_classes, target_names=["Distracted", "Drowsy"]))
+
+#Save the classification report to a text file
+with open("classification_report.txt", "w") as f:
+    f.write(classification_report(y_seq_classes, y_pred_classes, target_names=["Distracted", "Drowsy"]))    
 
 # Confusion matrix
 cm = confusion_matrix(y_seq_classes, y_pred_classes)

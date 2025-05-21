@@ -6,7 +6,7 @@
 
 - Python version 3.9.10 is required.
 - Install dependencies listed in `requirements.txt` before running any scripts.
-- Ensure you have the necessary dataset and permissions to process video frames.
+- Ensure you have the necessary dataset to process video frames.
 - For best results, use a machine with a compatible GPU for model training and evaluation.Requires python version 3.9.10
 
 1. Extract frames and labels using `extract_drowsiness_frames_and_labels.py`, and save them in `.npy` format.
