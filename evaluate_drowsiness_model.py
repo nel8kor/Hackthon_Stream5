@@ -1,4 +1,23 @@
 #!/usr/bin/env py
+"""
+This script evaluates a trained drowsiness detection model on a test dataset.
+Workflow:
+1. Loads test data (`X_seq.npy` for features and `y_seq.npy` for labels).
+2. Loads a pre-trained Keras model (`model.h5`).
+3. Evaluates the model on the test data and prints the validation accuracy.
+4. Generates class predictions for the test data.
+5. Handles both categorical and integer label formats for ground truth.
+6. Prints a classification report (precision, recall, f1-score, support) for each class ("Distracted", "Drowsy").
+7. Saves the classification report to a text file (`classification_report.txt`).
+8. Computes and visualizes the confusion matrix as a heatmap, saving it as `confusion_matrix.png`.
+Dependencies:
+- numpy
+- matplotlib
+- seaborn
+- keras
+- scikit-learn
+Intended for use in evaluating sequence-based drowsiness detection models.
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt

@@ -1,3 +1,17 @@
+"""
+This script processes validation data for a drowsiness detection task by filtering, relabeling, and preparing sequential data.
+Workflow:
+1. Loads image data (`X_val.npy`) and corresponding labels (`y_val.npy`).
+2. Filters samples to include only 'distracted' (label 1) and 'drowsy' (label 2) classes.
+3. Relabels 'distracted' as 0 and 'drowsy' as 1 for binary classification.
+4. One-hot encodes the binary labels.
+5. Constructs sequences of 10 consecutive frames for temporal modeling.
+6. Assigns the label of the middle frame in each sequence as the sequence label.
+7. Saves the resulting sequences and labels as NumPy arrays (`X_seq.npy`, `y_seq.npy`).
+Outputs:
+- `X_seq.npy`: Array of shape (num_sequences, 10, height, width, channels) containing frame sequences.
+- `y_seq.npy`: Array of shape (num_sequences, 2) containing one-hot encoded labels for each sequence.
+"""
 import numpy as np
 from tensorflow.keras.utils import to_categorical # type: ignore
 

@@ -1,5 +1,16 @@
 #!/usr/bin/env py
 # -*- coding: utf-8 -*-
+"""
+Builds and compiles a 3D Convolutional Neural Network (3D CNN) model for video classification tasks.
+The model consists of three convolutional blocks with Conv3D, MaxPooling3D, and BatchNormalization layers,
+followed by a dense classification head. The network is designed to process video clips or sequences of images.
+Args:
+    input_shape (tuple): Shape of the input data in the format (frames, height, width, channels).
+                            Default is (10, 240, 320, 3).
+    num_classes (int): Number of output classes for classification. Default is 2.
+Returns:
+    keras.models.Sequential: A compiled Keras Sequential model ready for training.
+"""
 import numpy as np
 from keras.utils import to_categorical # type: ignore
 from tensorflow.keras.models import Sequential # type: ignore

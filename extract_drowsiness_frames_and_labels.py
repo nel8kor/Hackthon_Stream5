@@ -1,5 +1,26 @@
 #!/usr/bin/env py
 # -*- coding: utf-8 -*-
+"""
+Extracts frames from a video file and assigns drowsiness-related labels to each frame based on eye aspect ratio (EAR) and head pitch.
+
+Args:
+    video_path (str): Path to the input video file.
+
+Returns:
+    tuple:
+        - numpy.ndarray: Array of processed video frames, normalized and resized.
+        - numpy.ndarray: Array of integer labels for each frame:
+            0 - alert,
+            1 - distracted,
+            2 - drowsy.
+        - float: Frames per second (FPS) of the input video.
+
+Notes:
+    - Uses MediaPipe FaceMesh for facial landmark detection.
+    - Requires global constants and helper functions:
+        LEFT_EYE, RIGHT_EYE, EAR_THRESHOLD, PITCH_THRESHOLD, FRAME_SIZE, eye_aspect_ratio, estimate_pitch, img_to_array.
+    - Frames are labeled based on thresholds for EAR and pitch over consecutive frames.
+"""
 import os
 import cv2
 import numpy as np
