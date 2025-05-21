@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt # type: ignore
 from keras.utils import to_categorical # type: ignore
 
 # Load the file
-X = np.load('saved_drowsy_npy\X_val.npy')
-y = np.load('saved_drowsy_npy\y_val.npy')
+X = np.load('saved_drowsy_npy\X_seq.npy')
+y = np.load('saved_drowsy_npy\y_seq.npy')
 
-#y = to_categorical(y, num_classes=3)
+#y = to_categorical(y, num_classes=2)
 
 print("X shape:", X.shape)
 print("y shape:", y.shape)

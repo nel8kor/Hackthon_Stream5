@@ -59,11 +59,11 @@ while True:
                 bgr_frame = cv2.cvtColor((f * 255).astype(np.uint8), cv2.COLOR_RGB2BGR)
                 cv2.imwrite(save_path, bgr_frame)
             # Convert list of frames to numpy array
-            drowsy_sequence = np.array(frame_buffer)  # shape: (10, height, width, 3)
-            labels=np.array(pred_class)
-            X.append(drowsy_sequence)
-            y.append(labels) 
-            #np.save(save_path, data)
+            # drowsy_sequence = np.array(frame_buffer)  # shape: (10, height, width, 3)
+            # labels=np.array(pred_class)
+            # X.append(drowsy_sequence)
+            # y.append(labels) 
+            # #np.save(save_path, data)
             print(f"🟥 Drowsy state detected — saved 10 frames at {timestamp}")
             # print(f"🟥 Drowsy state detected — saved sequence and label to {save_path}")
 
@@ -72,11 +72,11 @@ while True:
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-X_val = np.array(X)
-y_val = np.array(y)
-np.save(os.path.join(save_dir, "X_val.npy"), X_val)
-np.save(os.path.join(save_dir, "y_val.npy"), y_val)
-print(f"🟩 Saved {len(X_val)} frames and labels to {save_dir}")
+# X_val = np.array(X)
+# y_val = np.array(y)
+# np.save(os.path.join(save_dir, "X_val.npy"), X_val)
+# np.save(os.path.join(save_dir, "y_val.npy"), y_val)
+# print(f"🟩 Saved {len(X_val)} frames and labels to {save_dir}")
 
 # Cleanup
 cap.release()

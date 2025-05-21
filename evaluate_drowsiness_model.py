@@ -27,9 +27,9 @@ from keras.utils import to_categorical # type: ignore
 from sklearn.metrics import classification_report, confusion_matrix
 
 # Load test data
-X_seq = np.load('X_seq.npy')
-y_seq = np.load('y_seq.npy')
-
+X_seq = np.load('saved_drowsy_npy\X_seq.npy')
+y_seq = np.load('saved_drowsy_npy\y_seq.npy')
+y_seq = to_categorical(y_seq, num_classes=2)
 print(f"X_Seq shape: {X_seq.shape}")
 print(f"Y_seq shape: {y_seq.shape}")
 
