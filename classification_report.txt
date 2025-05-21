@@ -1,8 +1,8 @@
               precision    recall  f1-score   support
 
-  Distracted       0.00      0.00      0.00         0
-      Drowsy       1.00      0.66      0.80       163
+  Distracted       0.81      1.00      0.90       613
+      Drowsy       0.10      0.05      0.07       143
 
-    accuracy                           0.66       163
-   macro avg       0.50      0.33      0.40       163
-weighted avg       1.00      0.66      0.80       163
+    accuracy                           0.81       756
+   macro avg       0.46      0.53      0.49       756
+weighted avg       0.62      0.81      0.72       756
